@@ -1,0 +1,51 @@
+<section data-markdown data-state=title><script type="text/template">
+## Automating quality
+</script></section>
+
+<section data-markdown><script type="text/template">
+## What can we check?
+
+- dangerous patterns in code
+- complexity
+- code-coverage
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## JSHint
+
+- mix of style, safety and complexity cover
+- command-line tool
+- run it before you push any code
+- have a shared .jshintrc
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## JSHint demo
+
+```sh
+npm i -S jshint
+jshint *.js
+my-app.js: line 8, col 50, Expected an assignment or function call and instead saw an expression.
+my-app.js: line 14, col 22, Missing semicolon.
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## JSHint suggestion
+
+- keep it as minimal as possible
+- don't be pedantic
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Other projects
+
+- complexity-report
+- JS code style
+- Facebook Flow - type checker
+
+</script></section>

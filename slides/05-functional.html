@@ -1,0 +1,78 @@
+<section data-markdown data-state=title><script type="text/template">
+## Functional
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Functional programming
+
+- dumb data, and functions as the organisational principle
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## OO vs functional approach
+
+- objects: data that changes over time, in same object as functions
+- functional: pipelines of small functions returning new, transformed data
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Underscore.js
+
+- 'jQuery for Javascript'
+- lots of helpers for data and functions
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## e.g getting average age
+
+```javascript
+var users = [{ age: 22 }, { age: 18 }, { age: 42 }];
+var ages = _.pluck(users, "age");
+var sum = _.reduce(users, function(sum, age) { return sum + age }, 0);
+var mean = sum / ages.length;
+```
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## e.g creating a lookup table
+
+```javascript
+var users = [{ name: "alice", id: 1048 }, { id: 72 }, { age: 600 }];
+var usersById = _.indexBy(users, "id");
+
+var alice = usersById[1048];
+```
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## Why is underscore so useful?
+
+- functions all designed to take generic data
+- solve problems with arrays and objects, you get huge reuse
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## Functional vs OO
+
+> It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures
+
+Alan Perlis
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Why?
+
+- reuse
+- the one or two ubiquitous data-types will have 100s of functions for you
+- OO: lots of per-project data-types
+- the big let-down of OO: reuse
+
+</script></section>

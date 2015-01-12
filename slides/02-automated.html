@@ -1,0 +1,82 @@
+<section data-markdown data-state=title><script type="text/template">
+## Automation
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Destroy drudgery
+
+- anything that's repetitive: automate!
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Tools
+
+- lots exist
+- the principle will last
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Grunt
+
+- all JS - benefit
+- big ecosystem
+- sometimes slower than gulp, as gulp priortises in-memory work
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## What is grunt
+
+- a command-line tool
+- standard way of configuring/defining tasks
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## What can it do?
+
+- compile/minify JS, CSS, HTML
+- optimise images
+- lint code
+- watch files and trigger tasks
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## Gruntfile.js
+
+```javascript
+module.exports = configureGrunt;
+
+function configureGrunt(grunt) {
+  // Load grunt tasks automatically
+  require('load-grunt-tasks')(grunt);
+
+  grunt.config.init({
+    pkg: grunt.file.readJSON('package.json'),
+    jshint: {
+      all: [
+        'Gruntfile.js',
+        'src/{,*/},*.js',
+      ],
+    },
+    // others...
+  });
+
+  // this will be run via `$ grunt`
+  grunt.registerTask('default', [
+    'jshint:all',
+  ]);
+}
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Example
+
+<img src=img/grunt.png>
+
+</script></section>

@@ -1,0 +1,112 @@
+<section data-markdown data-state=title><script type="text/template">
+## NPM and CommonJS in depth
+</script></section>
+
+<section data-markdown><script type="text/template">
+## NPM
+
+- node package manager
+- npm registry - where packages live
+- `package.json` is where the magic lives
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Your first package
+
+- follow along!
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Install npm
+
+- nodejs.org
+- installer
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Setup package
+
+- navigate to project
+- `npm init`
+- follow the questions
+- do this after setting up repo and creating README.md to get lots of automation goodness
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Install dependencies
+
+- `npm install`
+- `npm install --save underscore`
+- `npm install --save-dev jshint`
+- `npm i -S underscore` - save keystrokes!
+</script></section>
+
+<section data-markdown><script type="text/template">
+## `package.json`
+
+- useful properties:
+
+```javascript
+// reduces amount downloaded by users - faster
+"files": ["README.md", "src/*.js"],
+// a standard way to document/run scripts
+"scripts": {
+  "build": "grunt",
+  "test": "grunt test",
+},
+// runnable scripts to place in users' paths
+"bin": {
+  "clever-script": "./bin/clever",
+}
+```
+</script></section>
+
+<section data-markdown data-state=title><script type="text/template">
+## Module patterns
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Simple
+
+```javascript
+exports.someFunction = aFunction;
+exports.another = function() {};
+
+function aFunction() {
+}
+```
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## Single-function
+
+```javascript
+module.exports = exports = dnaParser;
+
+function dnaParser() {
+}
+
+exports.helperFunction = function() {}
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Runnable
+
+```javascript
+// export our configured server
+module.exports = exports = server;
+
+// if we're running this file via `node file.js`
+// then kick off the server
+if(require.module === module) {
+  server.listen(80, function() {
+    console.log("server up");
+  });
+}
+```
+</script></section>

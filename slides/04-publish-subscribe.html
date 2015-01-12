@@ -1,0 +1,113 @@
+<section data-markdown data-state=title><script type="text/template">
+## Application modularity
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Modularity
+
+- independence is the sole criteria
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Gaining independence within one app
+</script></section>
+
+<section data-markdown><script type="text/template">
+## How?
+</script></section>
+
+<section data-markdown><script type="text/template">
+## A modular system: the internet
+
+- completely separate nodes
+- communicate only via messages
+- together provide huge functionality
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Anti-modular
+
+- shared dependencies - change one, all clients break
+- omnipotent objects - ready for use in any of the modules
+</script></section>
+
+<section data-markdown><script type="text/template">
+## OO in the large
+
+- OO in the small: everything is an object
+- OO in the large: components interact with messages
+- inside the components - functional code, whatever
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Publish-subscribe
+
+- one way of producing very low coupling
+- publisher has no knowledge of client
+- ideally: 'dumb' data only, no type coupling
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Example
+
+```html
+<nav>
+  <a href="/">Home</a>
+  <a href="/display">Display</a>
+</nav>
+
+<section id=stage>
+  <!-- routed content -->
+</section>
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Four components
+
+- router: manages URL state/history
+- click manager: capture non-remote URLs clicks
+- stage: URL state changes to views
+- nav: update to currently displayed route
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Hierarchy of glue
+
+- top-level component orchestrates big components
+- second-level component orchestrates smaller components
+- etc
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## e.g
+
+```javascript
+var router = require("./routing");
+var pubSub = new require("../lib/pub-sub");
+var navigationCapture = require("../lib/navigation-watcher");
+var stage = require("./stage");
+
+module.exports = function show(el) {
+  var routes = router({
+    "/": "home",
+    "/story/:id": "story",
+  });
+
+  routes.on("route", function(name, params) {
+    stage.show(name, params);
+  });
+
+  var navigation = navigationCapture(el, { localOnly: true });
+  navigation.on("navigate", function(url) {
+    routes.navigate(url);
+  });
+}
+
+```
+
+</script></section>

@@ -1,0 +1,125 @@
+</div>
+</div>
+
+
+
+<script src=slides-theme/js/code-example.js></script>
+<script>
+  function revealCodeSamples() {
+    codeExamples.reveal("script[type=code-example-alongside]");
+    codeExamples.reveal("script[type=console-setup]");
+    [].forEach.call(document.querySelectorAll("script[type=console-setup]"),function(el) {
+      eval(el.innerHTML);
+    });
+  }
+</script>
+
+<script src=slides-theme/js/little-console.js></script>
+<script>
+  function showConsoles() {
+
+    // show all consoles, and register 'cheats'
+    var cheats = [];
+
+    ;[].forEach.call(document.querySelectorAll(".little-console"),function(el) {
+      var cmds = new LittleConsole.Commands;
+      var console = new LittleConsole({el: el,commands: cmds});
+      var slide = el.parentElement;
+      var cheat = slide.querySelector("[type=cheat]");
+      if(!cheat) return;
+      cheats.push({
+        console: console,
+        slide: slide,
+        src: cheat.innerHTML,
+      });
+    });
+
+    // listen for 'cheat code' - ALT + C, and fill input
+    var C = 67;
+    document.body.addEventListener("keyup",function(evt) {
+      if(evt.keyCode !== C || !evt.altKey) return;
+      var slide = Reveal.getCurrentSlide();
+      cheats.forEach(function(setup) {
+        if(setup.slide !== slide) return;
+        setup.console.setCommand(setup.src);
+      });
+
+    });
+
+  }
+</script>
+
+<script src="reveal/lib/js/head.min.js"></script>
+<script src="reveal/js/reveal.min.js"></script>
+<script>
+  Reveal.initialize({
+
+    // Display controls in the bottom right corner
+    controls: false,
+
+    // Display a presentation progress bar
+    progress: true,
+
+    // Push each slide change to the browser history
+    history: true,
+
+    // Enable keyboard shortcuts for navigation
+    keyboard: true,
+
+    // Enable the slide overview mode
+    overview: true,
+
+    // Vertical centering of slides
+    center: false,
+
+    // Loop the presentation
+    loop: false,
+
+    // Change the presentation direction to be RTL
+    rtl: false,
+
+    // Number of milliseconds between automatically proceeding to the
+    // next slide, disabled when set to 0, this value can be overwritten
+    // by using a data-autoslide attribute on your slides
+    autoSlide: 0,
+
+    // Enable slide navigation via mouse wheel
+    mouseWheel: false,
+
+    // Apply a 3D roll to links on hover
+    rollingLinks: false,
+
+    // Transition style
+    transition: 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+    dependencies: [
+        // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+        { src: 'reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+
+        // Interreveal/pret Markdown in <section> elements
+        { src: 'reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'reveal/plugin/markdown/markdown.js', 
+          condition: function() { return !!document.querySelector( '[data-markdown]' ); },
+          callback: function() {
+            revealCodeSamples(); 
+            showConsoles();
+          } },
+
+        // Syntareveal/x highlight for <code> elements
+        { src: 'reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
+        // Zoom reveal/in and out with Alt+click
+        { src: 'reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+
+        // Speakreveal/er notes
+        { src: 'reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+
+        // Remotreveal/e control your reveal.js presentation using a touch device
+        // { src: 'reveal/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+    ]
+
+  });
+</script>
+</body>
+
+

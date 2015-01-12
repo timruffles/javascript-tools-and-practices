@@ -1,0 +1,109 @@
+<section data-markdown data-state=title><script type="text/template">
+## Module systems
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Task
+
+- loading
+- installing
+- referencing
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Two mature options
+
+1. CommonJS - node.js and browserify
+1. AMD - require.js
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## CommonJS
+
+```javascript
+// greeter.js
+// you get a module, the value of exports is exported
+module.exports.hi = function hi() {
+  console.log("hello");
+}
+```
+```javascript
+// another.js
+require("./greeter").hi();
+```
+
+```javascript
+// greeter-b.js
+module.exports = function hi() {
+  console.log("hello");
+}
+```
+```javascript
+// another-b.js
+// module only exports a function
+var hi = require("greeter-b");
+
+hi();
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## CommonJS
+
+- designed for node's use-case
+- in browser, requires you to pre-build
+
+```javascript
+var hi = require("greeter"); // browser can't block here
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Browserify
+
+- builds up CommonJS modules into a single file
+- with `watchify`, fast enough for development
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## AMD
+
+- asynchronous module definition
+- pure front-end solution, traditional `F5` work-flow
+- designed for front-end
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Defining & using
+
+```javascript
+define([], function() {
+  // return value is exported
+  return {
+    hi: function() {
+      console.log("hello");
+    }
+  }
+})
+```
+```javascript
+require(["greeter"], function(greeter) {
+  greeter.hi();
+});
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Trade-offs
+
+1. AMD has fewest dependencies
+1. browserify great for node teams
+1. ES6 modules will be future - but still not finalised
+</script></section>
+

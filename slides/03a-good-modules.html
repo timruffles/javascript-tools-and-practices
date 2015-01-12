@@ -1,0 +1,102 @@
+<section data-markdown data-state=title><script type="text/template">
+## Designing good modules
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Small API
+
+- easy to understand
+- document
+- test
+- maintain
+- and use
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Do as little as possible
+
+```javascript
+// hidden inside is a lovely reusable parser,
+// nothing to do with visualising anything
+var badModule = require("three-d-na")
+badModule({
+  dnaString: dnaString,
+});
+
+// revealed! now everyone can use it, and you
+// get more github stars :)
+var dnaParser = require("dna-parse");
+var goodModule = require("three-d-na");
+
+goodModule({
+  dnaString: dnaParser(dnaString),
+});
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Writing small modules
+
+- encourages reuse
+- reduces need to coordinate
+- simplifies debugging
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Don't bake in project-specifics
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Accept DOM elements, not CSS selectors
+
+```javascript
+// means I have to ensure elements are in the DOM,
+// limiting use and test-style
+function badModule(css) {
+  var el = $(css);
+}
+
+// can pass in detached elements, or even
+// stubbed out elements, like node implmentations of the DOM!
+function goodModule(el) {
+}
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Don't request data for people 
+
+```javascript
+// can only use with JSON, can't preload,
+// can't use web-sockets, or cache with localStorage etc
+badWidget({
+  json: "some.json",
+});
+
+// data can now come from anywhere
+goodWidget({
+  data: data,
+});
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Don't write singletons unncessarily
+
+```javascript
+// module-level variables can make your module
+// a singleton - what if people want two?
+var theEl;
+
+exports.widget = function(el) {
+  theEl = el;
+}
+
+exports.remove = function() {
+  $(theEl).remove();
+}
+```
+</script></section>
+
+

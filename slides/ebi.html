@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Writing Code People Like</title>
+
+    <link rel="shortcut icon" href="favicon.png">
+  
+    <link rel="stylesheet" href="reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="reveal/lib/css/github.css">
+
+    <link rel="stylesheet" href="slides-theme/style.css" id="theme">
+    <link rel="stylesheet" href="slides-theme/talk-specific.css" id="theme">
+
+    <link rel="stylesheet" href="slides-theme/js/little-console.css" id="theme">
+</head>
+
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<section data-markdown><script type="text/template">
+## Standard tools and approaches for JS
+</script></section>
+<section data-markdown data-state=title><script type="text/template">
+## Automation
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Destroy drudgery
+
+- anything that's repetitive: automate!
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Tools
+
+- lots exist
+- the principle will last
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Grunt
+
+- all JS - benefit
+- big ecosystem
+- sometimes slower than gulp, as gulp priortises in-memory work
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## What is grunt
+
+- a command-line tool
+- standard way of configuring/defining tasks
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## What can it do?
+
+- compile/minify JS, CSS, HTML
+- optimise images
+- lint code
+- watch files and trigger tasks
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## Gruntfile.js
+
+```javascript
+module.exports = configureGrunt;
+
+function configureGrunt(grunt) {
+  // Load grunt tasks automatically
+  require('load-grunt-tasks')(grunt);
+
+  grunt.config.init({
+    pkg: grunt.file.readJSON('package.json'),
+    jshint: {
+      all: [
+        'Gruntfile.js',
+        'src/{,*/},*.js',
+      ],
+    },
+    // others...
+  });
+
+  // this will be run via `$ grunt`
+  grunt.registerTask('default', [
+    'jshint:all',
+  ]);
+}
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Example
+
+<img src=img/grunt.png>
+
+</script></section>
+<section data-markdown data-state=title><script type="text/template">
+## Module systems
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Task
+
+- loading
+- installing
+- referencing
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Two mature options
+
+1. CommonJS - node.js and browserify
+1. AMD - require.js
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## CommonJS
+
+```javascript
+// greeter.js
+// you get a module, the value of exports is exported
+module.exports.hi = function hi() {
+  console.log("hello");
+}
+```
+```javascript
+// another.js
+require("./greeter").hi();
+```
+
+```javascript
+// greeter-b.js
+module.exports = function hi() {
+  console.log("hello");
+}
+```
+```javascript
+// another-b.js
+// module only exports a function
+var hi = require("greeter-b");
+
+hi();
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## CommonJS
+
+- designed for node's use-case
+- in browser, requires you to pre-build
+
+```javascript
+var hi = require("greeter"); // browser can't block here
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Browserify
+
+- builds up CommonJS modules into a single file
+- with `watchify`, fast enough for development
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## AMD
+
+- asynchronous module definition
+- pure front-end solution, traditional `F5` work-flow
+- designed for front-end
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Defining & using
+
+```javascript
+define([], function() {
+  // return value is exported
+  return {
+    hi: function() {
+      console.log("hello");
+    }
+  }
+})
+```
+```javascript
+require(["greeter"], function(greeter) {
+  greeter.hi();
+});
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Trade-offs
+
+1. AMD has fewest dependencies
+1. browserify great for node teams
+1. ES6 modules will be future - but still not finalised
+</script></section>
+
+<section data-markdown data-state=title><script type="text/template">
+## Application modularity
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Modularity
+
+- independence is the sole criteria
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Gaining independence within one app
+</script></section>
+
+<section data-markdown><script type="text/template">
+## How?
+</script></section>
+
+<section data-markdown><script type="text/template">
+## A modular system: the internet
+
+- completely separate nodes
+- communicate only via messages
+- together provide huge functionality
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Anti-modular
+
+- shared dependencies - change one, all clients break
+- omnipotent objects - ready for use in any of the modules
+</script></section>
+
+<section data-markdown><script type="text/template">
+## OO in the large
+
+- OO in the small: everything is an object
+- OO in the large: components interact with messages
+- inside the components - functional code, whatever
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Publish-subscribe
+
+- one way of producing very low coupling
+- publisher has no knowledge of client
+- ideally: 'dumb' data only, no type coupling
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Example
+
+```html
+<nav>
+  <a href="/">Home</a>
+  <a href="/display">Display</a>
+</nav>
+
+<section id=stage>
+  <!-- routed content -->
+</section>
+```
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Four components
+
+- router: manages URL state/history
+- click manager: capture non-remote URLs clicks
+- stage: URL state changes to views
+- nav: update to currently displayed route
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Hierarchy of glue
+
+- top-level component orchestrates big components
+- second-level component orchestrates smaller components
+- etc
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## e.g
+
+```javascript
+var router = require("./routing");
+var pubSub = new require("../lib/pub-sub");
+var navigationCapture = require("../lib/navigation-watcher");
+var stage = require("./stage");
+
+module.exports = function show(el) {
+  var routes = router({
+    "/": "home",
+    "/story/:id": "story",
+  });
+
+  routes.on("route", function(name, params) {
+    stage.show(name, params);
+  });
+
+  var navigation = navigationCapture(el, { localOnly: true });
+  navigation.on("navigate", function(url) {
+    routes.navigate(url);
+  });
+}
+
+```
+
+</script></section>
+<section data-markdown data-state=title><script type="text/template">
+## Functional
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Functional programming
+
+- dumb data, and functions as the organisational principle
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## OO vs functional approach
+
+- objects: data that changes over time, in same object as functions
+- functional: pipelines of small functions returning new, transformed data
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Underscore.js
+
+- 'jQuery for Javascript'
+- lots of helpers for data and functions
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## e.g getting average age
+
+```javascript
+var users = [{ age: 22 }, { age: 18 }, { age: 42 }];
+var ages = _.pluck(users, "age");
+var sum = _.reduce(users, function(sum, age) { return sum + age }, 0);
+var mean = sum / ages.length;
+```
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## e.g creating a lookup table
+
+```javascript
+var users = [{ name: "alice", id: 1048 }, { id: 72 }, { age: 600 }];
+var usersById = _.indexBy(users, "id");
+
+var alice = usersById[1048];
+```
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## Why is underscore so useful?
+
+- functions all designed to take generic data
+- solve problems with arrays and objects, you get huge reuse
+
+</script></section>
+
+
+<section data-markdown><script type="text/template">
+## Functional vs OO
+
+> It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures
+
+Alan Perlis
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Why?
+
+- reuse
+- the one or two ubiquitous data-types will have 100s of functions for you
+- OO: lots of per-project data-types
+- the big let-down of OO: reuse
+
+</script></section>
+<section data-markdown data-state=title><script type="text/template">
+## Inspector
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Tools for everyday dev
+
+- console
+- debugger
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Let's try
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Performance
+
+- don't worry until it's a bug
+- then profile
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Profiling
+
+- CPU: flame graph
+- rendering
+- memory use
+
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Let's try
+</script></section>
+<section data-markdown data-state=title><script type="text/template">
+## BioJS
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Goals
+
+- findability: can't reuse what you don't know about
+- reuse: patterns to ease reuse
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Findability
+
+- registry - information about bio modules
+- uses npm's registry
+- one line change to `package.json` to include
+
+```javascript
+  "keywords": ["biojs"],
+```
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Reuse
+
+- suggested patterns
+- code-standard quality criteria
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Patterns
+
+- common event system: based on Backbone.js
+- as it's well documented, small and simple
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Backbone.Event
+
+- common event system: based on Backbone.js
+- as it's well documented, small and simple
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Patterns
+
+- `README.md`
+- automated test
+- follow a style-guide
+</script></section>
+</div>
+</div>
+
+
+
+<script src=slides-theme/js/code-example.js></script>
+<script>
+  function revealCodeSamples() {
+    codeExamples.reveal("script[type=code-example-alongside]");
+    codeExamples.reveal("script[type=console-setup]");
+    [].forEach.call(document.querySelectorAll("script[type=console-setup]"),function(el) {
+      eval(el.innerHTML);
+    });
+  }
+</script>
+
+<script src=slides-theme/js/little-console.js></script>
+<script>
+  function showConsoles() {
+
+    // show all consoles, and register 'cheats'
+    var cheats = [];
+
+    ;[].forEach.call(document.querySelectorAll(".little-console"),function(el) {
+      var cmds = new LittleConsole.Commands;
+      var console = new LittleConsole({el: el,commands: cmds});
+      var slide = el.parentElement;
+      var cheat = slide.querySelector("[type=cheat]");
+      if(!cheat) return;
+      cheats.push({
+        console: console,
+        slide: slide,
+        src: cheat.innerHTML,
+      });
+    });
+
+    // listen for 'cheat code' - ALT + C, and fill input
+    var C = 67;
+    document.body.addEventListener("keyup",function(evt) {
+      if(evt.keyCode !== C || !evt.altKey) return;
+      var slide = Reveal.getCurrentSlide();
+      cheats.forEach(function(setup) {
+        if(setup.slide !== slide) return;
+        setup.console.setCommand(setup.src);
+      });
+
+    });
+
+  }
+</script>
+
+<script src="reveal/lib/js/head.min.js"></script>
+<script src="reveal/js/reveal.min.js"></script>
+<script>
+  Reveal.initialize({
+
+    // Display controls in the bottom right corner
+    controls: false,
+
+    // Display a presentation progress bar
+    progress: true,
+
+    // Push each slide change to the browser history
+    history: true,
+
+    // Enable keyboard shortcuts for navigation
+    keyboard: true,
+
+    // Enable the slide overview mode
+    overview: true,
+
+    // Vertical centering of slides
+    center: false,
+
+    // Loop the presentation
+    loop: false,
+
+    // Change the presentation direction to be RTL
+    rtl: false,
+
+    // Number of milliseconds between automatically proceeding to the
+    // next slide, disabled when set to 0, this value can be overwritten
+    // by using a data-autoslide attribute on your slides
+    autoSlide: 0,
+
+    // Enable slide navigation via mouse wheel
+    mouseWheel: false,
+
+    // Apply a 3D roll to links on hover
+    rollingLinks: false,
+
+    // Transition style
+    transition: 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+    dependencies: [
+        // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+        { src: 'reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+
+        // Interreveal/pret Markdown in <section> elements
+        { src: 'reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'reveal/plugin/markdown/markdown.js', 
+          condition: function() { return !!document.querySelector( '[data-markdown]' ); },
+          callback: function() {
+            revealCodeSamples(); 
+            showConsoles();
+          } },
+
+        // Syntareveal/x highlight for <code> elements
+        { src: 'reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
+        // Zoom reveal/in and out with Alt+click
+        { src: 'reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+
+        // Speakreveal/er notes
+        { src: 'reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+
+        // Remotreveal/e control your reveal.js presentation using a touch device
+        // { src: 'reveal/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+    ]
+
+  });
+</script>
+</body>
+
+
